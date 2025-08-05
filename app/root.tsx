@@ -1,25 +1,58 @@
-import { Links, Meta, Outlet, Scripts } from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts } from "@remix-run/react";
 import styles from './tailwind.css';
 import { LinksFunction } from "@remix-run/react/dist/routeModules";
+import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { ScrollRestoration } from "react-router-dom";
+import { getSession } from "./session.server";
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles }
-]
+];
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request);
+  const userId = session.get('userId');
+
+  const url = new URL(request.url);
+  
+  if (!userId && url.pathname !== '/login') {
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: '/login'
+      }
+    })
+  }
+
+  return json({});
+}
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'Dashboard App | Remix' },
+    {
+      property: 'og:title',
+      content: 'Very Cool App'
+    },
+    {
+      name: "description",
+      content: 'This app is the best'
+    }
+  ]
+}
 
 export default function App() {
   return (
     <html lang="es">
       <head>
-        <meta charSet="utf-8" />
-        <title>Gradi Dashboard</title>
-        <link rel="icon" href="data:image/x-icon;base64,AA"/>
         <Meta />
         <Links />
       </head>
-      <body className="bg-black text-white">
-        <h1 className="text-xl">Dashboard</h1>
+      <body className="bg-zinc-400">
         <Outlet />
+        <ScrollRestoration />
         <Scripts />
+        <LiveReload />
       </body>
     </html>
   );

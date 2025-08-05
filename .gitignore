@@ -8,6 +8,7 @@ yarn-error.log*
 # Remix build
 /build
 /public/build
+.next
 
 # Environment variables
 .env
@@ -26,3 +27,4 @@ aws-exports.js
 
 # Logs
 *.log
+.cache/
