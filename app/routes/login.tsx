@@ -1,8 +1,19 @@
-import { ActionFunction, Form, useActionData } from "react-router-dom";
+import { ActionFunction, Form, useActionData, LoaderFunction, redirect } from "react-router-dom";
 import { USER_LOGIN } from "~/data/data.login.server";
-import { createUserSession } from "~/session.server";
+import { createUserSession, getSession } from "~/session.server";
 import { Button } from '~/components/ui/button';
 import { Input } from "~/components/ui/input";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request);
+  const userId = session.get('userId');
+  
+  if (userId) {
+    return redirect('/dashboard');
+  }
+  
+  return null;
+}
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();

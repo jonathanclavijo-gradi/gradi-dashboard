@@ -11,18 +11,7 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request);
-  const userId = session.get('userId');
-
-  const url = new URL(request.url);
-  
-  if (!userId && url.pathname !== '/login') {
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: '/login'
-      }
-    })
-  }
+  const userId = session.get('userId');  
 
   return json({});
 }
