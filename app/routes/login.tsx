@@ -1,5 +1,8 @@
 import { ActionFunction, Form, useActionData } from "react-router-dom";
+import { USER_LOGIN } from "~/data/data.login.server";
 import { createUserSession } from "~/session.server";
+import { Button } from '~/components/ui/button';
+import { Input } from "~/components/ui/input";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -12,7 +15,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
   }
 
-  if (email == 'admin@test123.com' && password == '123456') {
+  if (email == USER_LOGIN.email && password == USER_LOGIN.password) {
     return createUserSession('user-123', '/dashboard');
   }
 
@@ -35,29 +38,28 @@ export default function LoginPage() {
             <div className="flex flex-col gap-5 mt-5">
               <div>
                 <label htmlFor="email" className="block text-sm text-gray-500">Correo</label>
-                <input type="email" 
+                <Input type="email" 
                   name="email"
                   id="email"
-                  className="text-black mt-1 block w-full border border-gray-100 rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="bg-slate-100 mt-2"
                 />
               </div>
               <div>
                 <label htmlFor="password" className="block text-sm text-gray-500">Contraseña</label>
-                <input type="password" 
+                <Input type="password" 
                   name="password"
                   id="password"
-                  className="text-black mt-1 block w-full border border-gray-100 rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="bg-slate-100 mt-2"
                 />
               </div>
               {actionData?.error && (
-                <div><span className="text-red-600 text-sm">{actionData.error}</span></div>
+                <div>
+                  <span className="text-red-600 text-sm">{actionData.error}</span>
+                </div>
               )}
-              <button 
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
-              >
+              <Button type="submit">
                 Iniciar sesion
-              </button>
+              </Button>
             </div>
           </Form>          
         </div>
