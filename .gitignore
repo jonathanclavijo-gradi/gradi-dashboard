@@ -28,3 +28,4 @@ aws-exports.js
 # Logs
 *.log
 .cache/
+/generated/prisma
